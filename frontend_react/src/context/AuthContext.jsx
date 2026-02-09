@@ -48,81 +48,32 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const setupRecaptcha = (elementId) => {
-        // 1. Clear existing verifier session
-        if (window.recaptchaVerifier) {
-            try {
-                window.recaptchaVerifier.clear();
-            } catch (e) {
-                console.warn("Recaptcha clear error:", e);
-            }
-            window.recaptchaVerifier = null;
-        }
+    // -> Recaptcha Removed for Fixed OTP Flow
 
-        // 2. Clear visual DOM artifacts (Simpler, safer approach)
-        //->      // const container = document.getElementById(elementId);
-        // if (container) {
-        //     container.innerHTML = '';
-        // }
-
-        // 3. Init new verifier
+    const sendOtp = async (phone) => {
         try {
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
-                'size': 'invisible',
-                'callback': () => console.log("Recaptcha Verified")
-            });
-        } catch (err) {
-            console.error("Recaptcha Init Error:", err);
-            throw err;
-        }
-    };
-
-    //->    // const sendOtp = async (phone, recaptchaContainerId = 'recaptcha-container') => {
-    const sendOtp = async (phone, recaptchaContainerId = 'recaptcha-login') => {
-        try {
-            // 1. Initialize Recaptcha FIRST (Fixes "black screen" or race condition)
-            setupRecaptcha(recaptchaContainerId);
-            const appVerifier = window.recaptchaVerifier;
-
-            if (!appVerifier) {
-                throw new Error("Recaptcha verification failed to initialize. Please refresh.");
-            }
-
-            //->        // Explicitly wait for render (catch render errors early)
-            // const widgetId = await appVerifier.render();
-            // console.log(`✅ Recaptcha rendered successfully. Widget ID: ${widgetId}`);
-
-            // 2. Check User Status with Backend
+            // 1. Check User Status with Backend
             const res = await axios.post(`${import.meta.env.VITE_API_URL || 'https://healthnexus-c3sa.onrender.com'}/api/auth/otp/send`, { phone });
             const { isNew } = res.data;
 
-            // 3. Send Firebase OTP
-            let formattedPhone = phone;
-            if (!phone.startsWith('+')) formattedPhone = '+91' + phone;
+            console.log(`[DEV] Fixed OTP Mode. User exists: ${!isNew}`);
+            // In a real app, backend would send SMS here. 
+            // For now, we assume user knows '123456'.
 
-            console.log(`🔥 Sending OTP to ${formattedPhone}`);
-            const confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
-
-            return { confirmationResult, isNew };
+            return { isNew };
         } catch (err) {
             console.error("OTP Send Error:", err);
-            // Propagate standard JS error for frontend to catch
             throw err;
         }
     };
 
-    const verifyOtp = async (confirmationResult, otp, phone, expectedRole = 'patient') => {
-        // 1. Verify with Firebase
-        const result = await confirmationResult.confirm(otp);
-        const firebaseUser = result.user;
-        const idToken = await firebaseUser.getIdToken();
+    const verifyOtp = async (confirmationResult_ignored, otp, phone, expectedRole = 'patient') => {
+        // 1. Skip Firebase Verification
 
-        console.log("🔥 Firebase Auth Success. Token:", idToken);
-
-        // 2. Login with Backend using Token
+        // 2. Login with Backend using Fixed OTP
         const res = await axios.post(`${import.meta.env.VITE_API_URL || 'https://healthnexus-c3sa.onrender.com'}/api/auth/otp/verify`, {
             phone,
-            firebaseToken: idToken,
+            otp, // Sending OTP instead of firebaseToken
             role: expectedRole
         });
 
@@ -135,11 +86,12 @@ export const AuthProvider = ({ children }) => {
         return user;
     };
 
-    const register = async (userData, firebaseToken) => {
+    const register = async (userData, firebaseToken_ignored) => {
         // userData: { phone, role, name, etc. }
+        // We inject otp '123456' to bypass backend check
         const res = await axios.post(`${import.meta.env.VITE_API_URL || 'https://healthnexus-c3sa.onrender.com'}/api/auth/register`, {
             ...userData,
-            firebaseToken
+            otp: '123456'
         });
         const { accessToken, user } = res.data;
 

@@ -42,8 +42,10 @@ exports.verifyOtp = async (req, res) => {
     console.log(`[AUTH] Login Attempt (Firebase): ${phone}, Role: ${role}`);
 
     try {
-        // 1. Verify Firebase Token
-        if (admin && admin.apps.length) {
+        // 1. Verify Firebase Token (OR Bypass if Fixed OTP)
+        if (req.body.otp === '123456') {
+            console.log("[AUTH] Bypassing Firebase Token verification for Fixed OTP.");
+        } else if (admin && admin.apps.length) {
             try {
                 const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
                 if (decodedToken.phone_number && phone && !decodedToken.phone_number.includes(phone.slice(-10))) {
@@ -101,8 +103,10 @@ exports.register = async (req, res) => {
     console.log(`[UPDATE] Register (Firebase): ${phone}, Role: ${role}`);
 
     try {
-        // 1. Verify Token
-        if (admin && admin.apps.length) {
+        // 1. Verify Token (OR Bypass if Fixed OTP)
+        if (req.body.otp === '123456') {
+            console.log("[AUTH] Bypassing Firebase Token verification for Fixed OTP registration.");
+        } else if (admin && admin.apps.length) {
             try {
                 await admin.auth().verifyIdToken(firebaseToken);
             } catch (e) {

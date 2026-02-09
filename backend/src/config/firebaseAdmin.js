@@ -11,18 +11,36 @@ const path = require('path');
 const serviceAccountPath = path.join(__dirname, '../../service-account.json');
 
 try {
-    const serviceAccount = require(serviceAccountPath);
-    if (!admin.apps.length) {
+    let serviceAccount;
+
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+        // [DEPLOYMENT] Use Environment Variable
+        try {
+            serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            console.log("[FIREBASE] Loading credentials from Environment Variable");
+        } catch (e) {
+            console.error("[ERROR] Failed to parse FIREBASE_SERVICE_ACCOUNT env var");
+        }
+    } else {
+        // [LOCAL] Use File
+        try {
+            serviceAccount = require(serviceAccountPath);
+            console.log("[FIREBASE] Loading credentials from local file");
+        } catch (e) {
+            // File not found, will be handled below
+        }
+    }
+
+    if (serviceAccount && !admin.apps.length) {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
         });
         console.log("[FIREBASE] Admin SDK initialized successfully");
+    } else if (!serviceAccount) {
+        throw new Error("No service account credentials found (Env Var or File)");
     }
 } catch (error) {
     console.error("[ERROR] Firebase Admin initialization failed:", error.message);
-    if (error.code === 'MODULE_NOT_FOUND') {
-        console.warn("[WARNING] service-account.json not found at:", serviceAccountPath);
-    }
 }
 
 const db = admin.apps.length ? admin.firestore() : null;

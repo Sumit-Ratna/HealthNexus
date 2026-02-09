@@ -16,38 +16,22 @@ const Login = () => {
 
     const handleSend = async () => {
         try {
-            const { confirmationResult, isNew } = await sendOtp(phoneNumber, 'recaptcha-login');
-            setConfirmationResult(confirmationResult);
-            setIsNewUser(isNew || false);
-            setStep(2);
-        } catch (err) {
-            console.error("Full Login Error:", err);
-            let errorMessage = "An error occurred";
-
-            if (err.isAxiosError) {
-                errorMessage = "Network Error: Cannot connect to backend server. Make sure the backend is running and accessible.";
-            } else if (err.code) {
-                switch (err.code) {
-                    case 'auth/network-request-failed':
-                        errorMessage = "Firebase Network Error: Check your internet connection or if the domain is authorized in Firebase Console.";
-                        break;
-                    case 'auth/invalid-phone-number':
-                        errorMessage = "Invalid phone number format.";
-                        break;
-                    case 'auth/quota-exceeded':
-                        errorMessage = "SMS quota exceeded for this project.";
-                        break;
-                    case 'auth/missing-app-credential':
-                        errorMessage = "Missing app credential (reCAPTCHA) token.";
-                        break;
-                    default:
-                        errorMessage = `Firebase Error: ${err.code}`;
-                }
-            } else {
-                errorMessage = err.message;
+            if (!phoneNumber) {
+                alert("Please enter a phone number");
+                return;
             }
-
-            alert("Failed to send OTP: " + errorMessage);
+            const { isNew } = await sendOtp(phoneNumber);
+            // setIsNewUser(isNew || false); // Backend logic decides, usually we just proceed to OTP
+            // Actually, in current flow we just need to know if we should redirect later?
+            // The isNew logic was for visual clues, but critical logic is in verifyOtp response (which returns user or 404).
+            // But wait, getOtp returns isNew.
+            setIsNewUser(isNew);
+            setStep(2);
+            // Auto-fill OTP for convenience
+            setOtp('123456');
+        } catch (err) {
+            console.error("Login Error:", err);
+            alert("Failed to connect: " + err.message);
         }
     };
 
@@ -107,7 +91,7 @@ const Login = () => {
                                 </div>
                             </div>
 
-                            <div id="recaptcha-login" style={{ marginBottom: '20px' }}></div>
+                            {/* Recaptcha Removed for Fixed OTP */}
 
                             <button className="btn-primary" onClick={handleSend}>
                                 Check Availability & Send OTP
