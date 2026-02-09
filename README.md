@@ -97,7 +97,7 @@ npm install
 npm run dev
 ```
 
-The application will be available at [http://localhost:3003](http://localhost:3003).
+The application will be available at [http://localhost:5000](http://localhost:5000).
 
 ## Credits
 
