@@ -2,10 +2,8 @@
 
 HealthNexus is an advanced AI-powered health records management system that bridges the gap between doctors and patients.
 
-## 🚀 Key Features
+## Key Features
 
-
-## 🚀 Key Features
 
 ### 1. **AI-Powered Diagnostics & Insights**
 - **Smart Lab Reports**: Upload lab reports (PDF/Images) and get instant, simplified AI summaries.
@@ -32,14 +30,14 @@ HealthNexus is an advanced AI-powered health records management system that brid
     *   **Doctors**: View shared medical history and upload prescriptions directly to a patient's timeline.
 - **Patient Dashboard**: Track all connected patients, their history, and uploaded records in a unified interface.
 
-### 5. 📅 OPD & Appointment Management
+### 5. OPD & Appointment Management
 *   **Live Status**: Track your current position in the doctor's OPD queue.
 *   **Booking**: Schedule visits and get notifications for upcoming checkups.
 *   **History**: Every visit is logged with automated data extraction for future reference.
 
 ---
 
-## 🛠️ Technical Architecture
+##  Technical Architecture
 
 ### Frontend (React + Vite)
 *   **UI/UX**: Modern, mobile-first design using `framer-motion` for smooth transitions.
@@ -54,31 +52,31 @@ HealthNexus is an advanced AI-powered health records management system that brid
 ---
 
 
-## 🔒 Security & Privacy
+##  Security & Privacy
 *   **Data Normalization**: Automatic self-healing database logic for phone numbers.
 *   **Private by Default**: No doctor can see a report unless it is explicitly shared by the patient.
 *   **Secure Auth**: No-password direct login mode supported with Firebase background verification.
 
 
-## 🔑 Demo Credentials
+##  Demo Credentials
 
 Use the following credentials to test the application. The OTP is hardcoded to `123456` for all test accounts.
 
-### 🏥 Doctor Portal
+###  Doctor Portal
 *   **Phone**: `+91 1234567890`
 *   **OTP**: `123456`
 
-### 👤 Patient Portal (Main)
+###   Patient Portal (Main)
 *   **Phone**: `+91 1234567899`
 *   **OTP**: `123456`
 
-### 👤 Patient Portal (Secondary)
+###   Patient Portal (Secondary)
 *   **Phone**: `+91 6205904440`
 *   **OTP**: `123456`
 
 ---
 
-## 🛠️ Setup & Running
+##  Setup & Running
 
 ### Prerequisites
 - Node.js (v18+)
