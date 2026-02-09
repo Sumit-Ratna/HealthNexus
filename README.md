@@ -97,9 +97,9 @@ npm install
 npm run dev
 ```
 
-The application will be available at [http://localhost:5000](http://localhost:5000).
-Backend: Running on http://localhost:8080 (Connected to Firebase).
-Frontend: Running on http://localhost:5000.
+The application will be available at [http://localhost:3000](http://localhost:3000).
+Backend: Running on http://localhost:8000 (Connected to Firebase).
+Frontend: Running on http://localhost:3000.
 
 ## Credits
 
