@@ -31,9 +31,12 @@ try {
     }
 } catch (error) {
     console.error("[ERROR] Firebase Admin initialization failed:", error.message);
-    if (error.code === 'MODULE_NOT_FOUND') {
-        console.warn("[WARNING] service-account.json not found at:", serviceAccountPath);
-        console.warn("[WARNING] Firestore is not initialized. Please add service-account.json file.");
+    console.error("[ERROR] Error type:", error.constructor.name);
+    console.error("[ERROR] Full error:", JSON.stringify({ code: error.code, name: error.name, message: error.message }));
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+        console.error("[ERROR] FIREBASE_SERVICE_ACCOUNT env var is set but parsing/init failed");
+        console.error("[ERROR] Env var length:", process.env.FIREBASE_SERVICE_ACCOUNT.length);
+        console.error("[ERROR] Env var starts with:", process.env.FIREBASE_SERVICE_ACCOUNT.substring(0, 30));
     }
 }
 
