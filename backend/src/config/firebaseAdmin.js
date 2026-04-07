@@ -11,7 +11,18 @@ const path = require('path');
 const serviceAccountPath = path.join(__dirname, '../../service-account.json');
 
 try {
-    const serviceAccount = require(serviceAccountPath);
+    let serviceAccount;
+    
+    // Try environment variable first (for cloud deployment like Render)
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+        serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+        console.log("[FIREBASE] Loading credentials from environment variable");
+    } else {
+        // Fall back to local file (for development)
+        serviceAccount = require(serviceAccountPath);
+        console.log("[FIREBASE] Loading credentials from service-account.json");
+    }
+    
     if (!admin.apps.length) {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
@@ -22,6 +33,7 @@ try {
     console.error("[ERROR] Firebase Admin initialization failed:", error.message);
     if (error.code === 'MODULE_NOT_FOUND') {
         console.warn("[WARNING] service-account.json not found at:", serviceAccountPath);
+        console.warn("[WARNING] Firestore is not initialized. Please add service-account.json file.");
     }
 }
 
