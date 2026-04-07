@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
@@ -17,7 +18,7 @@ const ScanQR = () => {
         setMessage('');
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get(`http://localhost:8080/api/connect/doctor/qr/${manualId}`, {
+            const res = await axios.get(`${API_URL}/api/connect/doctor/qr/${manualId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setDoctorData(res.data);
@@ -43,7 +44,7 @@ const ScanQR = () => {
         setStatus('connecting');
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.post('http://localhost:8080/api/connect/doctor/link',
+            const res = await axios.post(`${API_URL}/api/connect/doctor/link`,
                 { doctor_qr_id: doctorData.doctor_qr_id },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

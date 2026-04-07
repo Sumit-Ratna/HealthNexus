@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -31,7 +32,7 @@ const PrescribeMedicine = () => {
 
     const fetchPatient = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/doctor/patients/${patientId}/history`);
+            const res = await axios.get(`${API_URL}/api/doctor/patients/${patientId}/history`);
             setPatient(res.data.patient);
         } catch (err) {
             console.error('Error fetching patient:', err);
@@ -62,7 +63,7 @@ const PrescribeMedicine = () => {
         try {
             const medicineNames = medicines.map(m => `${m.name} ${m.dosage} ${m.frequency} for ${m.duration}`);
 
-            const res = await axios.post('http://localhost:8080/api/doctor/prescribe', {
+            const res = await axios.post(`${API_URL}/api/doctor/prescribe`, {
                 patient_id: patientId,
                 medicines: medicineNames,
                 diagnosis,

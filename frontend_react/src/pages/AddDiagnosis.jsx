@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -29,7 +30,7 @@ const AddDiagnosis = () => {
 
     const fetchPatient = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/doctor/patients/${patientId}/history`);
+            const res = await axios.get(`${API_URL}/api/doctor/patients/${patientId}/history`);
             setPatient(res.data.patient);
         } catch (err) {
             console.error('Error fetching patient:', err);
@@ -44,7 +45,7 @@ const AddDiagnosis = () => {
 
         setLoading(true);
         try {
-            await axios.post('http://localhost:8080/api/doctor/diagnosis', {
+            await axios.post(`${API_URL}/api/doctor/diagnosis`, {
                 patient_id: patientId,
                 diagnosis,
                 symptoms,

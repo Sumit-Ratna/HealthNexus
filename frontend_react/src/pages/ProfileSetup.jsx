@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +28,7 @@ const ProfileSetup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/api/profile/update', {
+            await axios.post(`${API_URL}/api/profile/update`, {
                 section: 'personal',
                 data: formData
             });

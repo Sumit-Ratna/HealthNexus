@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -39,7 +40,7 @@ const PatientHistory = () => {
                 food_preference: editFormData.diet
             };
 
-            await axios.put(`http://localhost:8080/api/doctor/patients/${patient_id}/profile`,
+            await axios.put(`${API_URL}/api/doctor/patients/${patient_id}/profile`,
                 { medical_history, lifestyle },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -75,7 +76,7 @@ const PatientHistory = () => {
 
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.post('http://localhost:8080/api/documents/upload', formData, {
+            const res = await axios.post(`${API_URL}/api/documents/upload`, formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -112,7 +113,7 @@ const PatientHistory = () => {
     const fetchPatientHistory = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get(`http://localhost:8080/api/connect/doctor/patient/${patient_id}`, {
+            const res = await axios.get(`${API_URL}/api/connect/doctor/patient/${patient_id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             console.log("📄 Patient History Data:", res.data);
@@ -129,7 +130,7 @@ const PatientHistory = () => {
         if (window.confirm("Are you sure? This will remove the record from your portal. (Note: Only records you created will be permanently deleted; patient-shared reports will simply be unshared).")) {
             try {
                 const token = localStorage.getItem('accessToken');
-                const res = await axios.delete(`http://localhost:8080/api/documents/${docId}`, {
+                const res = await axios.delete(`${API_URL}/api/documents/${docId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 fetchPatientHistory(); // Refresh
@@ -151,7 +152,7 @@ const PatientHistory = () => {
 
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.post(`http://localhost:8080/api/documents/${docId}/analyze`, {}, {
+            const res = await axios.post(`${API_URL}/api/documents/${docId}/analyze`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("Analysis Complete!");
@@ -379,7 +380,7 @@ const PatientHistory = () => {
                                     <div style={{ display: 'flex', gap: '8px' }}>
                                         {doc.file_url && (
                                             <button
-                                                onClick={() => window.open(`http://localhost:8080/${doc.file_url}`, '_blank')}
+                                                onClick={() => window.open(`${API_URL}/${doc.file_url}`, '_blank')}
                                                 style={{
                                                     padding: '6px 12px',
                                                     borderRadius: '8px',

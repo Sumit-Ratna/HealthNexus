@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
@@ -25,7 +26,7 @@ const LearnMedicines = () => {
 
         try {
             // We reuse the same endpoint but pass a generic context since there is no report
-            const res = await axios.post('http://localhost:8080/api/ai/explainer', {
+            const res = await axios.post(`${API_URL}/api/ai/explainer`, {
                 medicine_name: searchTerm,
                 patient_id: user?.id || 'guest',
                 report_context: JSON.stringify({

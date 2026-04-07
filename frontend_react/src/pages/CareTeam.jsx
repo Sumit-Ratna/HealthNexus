@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -14,7 +15,7 @@ const CareTeam = () => {
     const fetchConnectedDoctors = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get('http://localhost:8080/api/connect/patient/doctors', {
+            const res = await axios.get(`${API_URL}/api/connect/patient/doctors`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setDoctors(res.data);
@@ -41,7 +42,7 @@ const CareTeam = () => {
         setChecking(true);
         setSafetyAnalysis(null);
         try {
-            const res = await axios.post('http://localhost:8080/api/ai/safety-check', {
+            const res = await axios.post(`${API_URL}/api/ai/safety-check`, {
                 newMed: medication,
                 patientHistory
             });

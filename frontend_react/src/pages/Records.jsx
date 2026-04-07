@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -45,7 +46,7 @@ const Records = ({ viewingPatientId }) => {
     const fetchConnectedDoctors = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get('http://localhost:8080/api/connect/patient/doctors', {
+            const res = await axios.get(`${API_URL}/api/connect/patient/doctors`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setConnectedDoctors(res.data);
@@ -57,7 +58,7 @@ const Records = ({ viewingPatientId }) => {
     const fetchDocuments = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get(`http://localhost:8080/api/documents/patient/${targetUserId}`, {
+            const res = await axios.get(`${API_URL}/api/documents/patient/${targetUserId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setDocuments(res.data);
@@ -104,7 +105,7 @@ const Records = ({ viewingPatientId }) => {
 
         try {
             console.log(`Uploading file ${shouldAnalyze ? '(with analysis)' : ''}...`, file.name);
-            const res = await axios.post('http://localhost:8080/api/documents/upload', formData, {
+            const res = await axios.post(`${API_URL}/api/documents/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -131,7 +132,7 @@ const Records = ({ viewingPatientId }) => {
 
     const handleShareUpdate = async (docId, doctorIds) => {
         try {
-            await axios.patch(`http://localhost:8080/api/documents/${docId}/share`, {
+            await axios.patch(`${API_URL}/api/documents/${docId}/share`, {
                 doctor_ids: doctorIds
             }, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
@@ -151,7 +152,7 @@ const Records = ({ viewingPatientId }) => {
 
         if (window.confirm(warning)) {
             try {
-                await axios.delete(`http://localhost:8080/api/documents/${docId}`, {
+                await axios.delete(`${API_URL}/api/documents/${docId}`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
                 });
                 fetchDocuments(); // Refresh list
@@ -167,7 +168,7 @@ const Records = ({ viewingPatientId }) => {
         setUploading(true); // Reuse uploading state to show loading spinner
         try {
             console.log("Requesting AI analysis for doc:", docId);
-            const res = await axios.post(`http://localhost:8080/api/documents/${docId}/analyze`, {}, {
+            const res = await axios.post(`${API_URL}/api/documents/${docId}/analyze`, {}, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
             });
             console.log("Analysis result:", res.data);
@@ -202,7 +203,7 @@ const Records = ({ viewingPatientId }) => {
                 }
             }
 
-            const res = await axios.post('http://localhost:8080/api/ai/explainer', {
+            const res = await axios.post(`${API_URL}/api/ai/explainer`, {
                 medicine_name: medicine,
                 patient_id: targetUserId,
                 report_context: JSON.stringify(contextData || {})
@@ -622,7 +623,7 @@ const Records = ({ viewingPatientId }) => {
                             }}>
                                 <div style={{ display: 'flex', gap: '8px' }}>
                                     <button
-                                        onClick={() => window.open(`http://localhost:8080/${doc.file_url}`, '_blank')}
+                                        onClick={() => window.open(`${API_URL}/${doc.file_url}`, '_blank')}
                                         disabled={!doc.file_url}
                                         style={{
                                             padding: '6px 14px',

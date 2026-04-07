@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { Activity, FileText, Mic, ChevronRight, UserPlus, Bell, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -21,7 +22,7 @@ const Home = () => {
     const fetchConnectedDoctors = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get('http://localhost:8080/api/connect/patient/doctors', {
+            const res = await axios.get(`${API_URL}/api/connect/patient/doctors`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setDoctors(res.data);
@@ -35,7 +36,7 @@ const Home = () => {
     const fetchAppointments = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get('http://localhost:8080/api/connect/patient/appointments', {
+            const res = await axios.get(`${API_URL}/api/connect/patient/appointments`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setAppointments(res.data);

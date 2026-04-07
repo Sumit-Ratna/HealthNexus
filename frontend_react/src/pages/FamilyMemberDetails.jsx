@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -22,7 +23,7 @@ const FamilyMemberDetails = () => {
     const fetchMemberDetails = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get(`http://localhost:8080/api/family/${memberId}`, {
+            const res = await axios.get(`${API_URL}/api/family/${memberId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             // Result structure from familyController: { member: { ... }, documents: [], appointments: [], relation: string }

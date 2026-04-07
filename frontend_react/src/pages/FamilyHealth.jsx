@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +29,7 @@ const FamilyHealth = () => {
     const fetchFamilyMembers = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get('http://localhost:8080/api/family/list', {
+            const res = await axios.get(`${API_URL}/api/family/list`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMembers(res.data);
@@ -49,7 +50,7 @@ const FamilyHealth = () => {
         try {
             // 1. Tell backend to prepare the link (and check if user exists)
             const token = localStorage.getItem('accessToken');
-            await axios.post('http://localhost:8080/api/family/add', {
+            await axios.post(`${API_URL}/api/family/add`, {
                 phone: newMemberPhone,
                 relation: relation
             }, {
@@ -104,7 +105,7 @@ const FamilyHealth = () => {
 
             // 2. Send Token to Backend to finalize link
             const token = localStorage.getItem('accessToken');
-            await axios.post('http://localhost:8080/api/family/verify', {
+            await axios.post(`${API_URL}/api/family/verify`, {
                 phone: newMemberPhone,
                 firebaseToken: idToken
             }, {
@@ -142,7 +143,7 @@ const FamilyHealth = () => {
         if (!window.confirm("Are you sure you want to remove this family member?")) return;
         try {
             const token = localStorage.getItem('accessToken');
-            await axios.delete(`http://localhost:8080/api/family/${memberId}`, {
+            await axios.delete(`${API_URL}/api/family/${memberId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchFamilyMembers();

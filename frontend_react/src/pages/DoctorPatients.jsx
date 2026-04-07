@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -23,7 +24,7 @@ const DoctorPatients = () => {
     const fetchPatients = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const res = await axios.get('http://localhost:8080/api/connect/doctor/patients', {
+            const res = await axios.get(`${API_URL}/api/connect/doctor/patients`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setPatients(res.data);

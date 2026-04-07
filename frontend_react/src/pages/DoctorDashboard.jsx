@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -22,10 +23,10 @@ const DoctorDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const statsRes = await axios.get('http://localhost:8080/api/doctor/dashboard');
+            const statsRes = await axios.get(`${API_URL}/api/doctor/dashboard`);
             setStats(statsRes.data);
 
-            const patientsRes = await axios.get('http://localhost:8080/api/doctor/patients');
+            const patientsRes = await axios.get(`${API_URL}/api/doctor/patients`);
             setPatients(patientsRes.data);
         } catch (err) {
             console.error('Error fetching doctor data:', err);

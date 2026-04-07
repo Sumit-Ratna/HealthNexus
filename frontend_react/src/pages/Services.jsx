@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -31,7 +32,7 @@ const Services = () => {
         setSafetyAnalysis(null);
         setError('');
         try {
-            const res = await axios.post('http://localhost:8080/api/ai/safety-check', {
+            const res = await axios.post(`${API_URL}/api/ai/safety-check`, {
                 newMed: medication,
                 patientHistory
             });
@@ -47,7 +48,7 @@ const Services = () => {
     const handleBookOpd = async () => {
         setBooking(true);
         try {
-            await axios.post('http://localhost:8080/api/appointments/book/opd', {
+            await axios.post(`${API_URL}/api/appointments/book/opd`, {
                 symptoms: "General Checkup",
                 notes: "Self-booked via App"
             });

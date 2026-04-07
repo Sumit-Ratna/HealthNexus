@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -90,7 +91,7 @@ const Profile = () => {
                 data = lifestyleData;
             }
 
-            await axios.post('http://localhost:8080/api/profile/update', { section, data });
+            await axios.post(`${API_URL}/api/profile/update`, { section, data });
             alert('Profile updated successfully!');
             setEditMode(false);
             // Refresh user data
