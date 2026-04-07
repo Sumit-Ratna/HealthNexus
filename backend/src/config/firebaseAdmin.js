@@ -8,17 +8,25 @@ const admin = require('firebase-admin');
 // 4. Update the `serviceAccountPath` below if needed.
 
 const path = require('path');
+const fs = require('fs');
 const serviceAccountPath = path.join(__dirname, '../../service-account.json');
+const renderSecretPath = '/etc/secrets/service-account.json';
 
 try {
     let serviceAccount;
     
-    // Try environment variable first (for cloud deployment like Render)
-    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    // 1. Try Render Secret Files first (most reliable for Render deployment)
+    if (fs.existsSync(renderSecretPath)) {
+        serviceAccount = JSON.parse(fs.readFileSync(renderSecretPath, 'utf8'));
+        console.log("[FIREBASE] Loading credentials from Render Secret File:", renderSecretPath);
+    }
+    // 2. Try environment variable (alternative for cloud deployment)
+    else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
         serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
         console.log("[FIREBASE] Loading credentials from environment variable");
-    } else {
-        // Fall back to local file (for development)
+    }
+    // 3. Fall back to local file (for development)
+    else {
         serviceAccount = require(serviceAccountPath);
         console.log("[FIREBASE] Loading credentials from service-account.json");
     }
