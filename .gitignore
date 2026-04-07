@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+*.local
+
+# Build output
+dist/
+dist-ssr/
+
+# Uploads & secrets
+uploads/
+service-account.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# macOS
+__MACOSX/
+
+# Android build artifacts
+android/.gradle/
+android/app/build/
